@@ -1,6 +1,6 @@
 /*!
  * Fortune.js
- * Version 5.5.16
+ * Version 5.5.17
  * MIT License
  * http://fortune.js.org
  */
@@ -2962,7 +2962,10 @@ module.exports = function (context) {
     if (linkKey in fields[field]) links.push(field)
 
   // In case of deletion, denormalized inverse fields must be updated.
-  for (field in denormalizedFields) links.push(field)
+  for (field in denormalizedFields)
+    // Since denormalizedFields contains fields from ALL types, need to
+    // qualify if it is on this type or not.
+    if (field in fields) links.push(field)
 
   if (!ids || !ids.length)
     throw new NotFoundError(message('DeleteRecordsMissingID', language))
@@ -4234,6 +4237,7 @@ function fromByteArray (uint8) {
 }
 
 },{}],47:[function(require,module,exports){
+(function (Buffer){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -6012,7 +6016,8 @@ function numberIsNaN (obj) {
   return obj !== obj // eslint-disable-line no-self-compare
 }
 
-},{"base64-js":46,"ieee754":50}],48:[function(require,module,exports){
+}).call(this,require("buffer").Buffer)
+},{"base64-js":46,"buffer":47,"ieee754":50}],48:[function(require,module,exports){
 'use strict'
 
 var hasCaptureStackTrace = 'captureStackTrace' in Error
